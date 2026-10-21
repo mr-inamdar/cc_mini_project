@@ -1,52 +1,78 @@
 /* ══════════════════════════════════════
-   payment.js — Razorpay checkout flow
+   payment.js — Simulated Demo Payment Flow
    ══════════════════════════════════════ */
 
 const Payment = (() => {
   let _addressData = null;
 
   function initCheckout() {
-    if (!Auth.isLoggedIn()) {
-      UI.openAuthModal();
-      Toast.show('Please sign in to checkout', 'info');
-      return;
-    }
     if (Cart.getItems().length === 0) {
       Toast.show('Your cart is empty', 'error');
       return;
     }
+
     _addressData = null;
     goToStep(1);
     document.getElementById('checkoutModal').classList.add('open');
 
-    // Pre-fill user data
+    // Pre-fill user data if logged in
     const user = Auth.getUser();
     if (user) {
-      document.getElementById('ckName').value = user.name || '';
-      document.getElementById('ckEmail').value = user.email || '';
-      document.getElementById('ckPhone').value = user.phone || '';
+      const nameInput = document.getElementById('ckName');
+      const emailInput = document.getElementById('ckEmail');
+      const phoneInput = document.getElementById('ckPhone');
+      if (nameInput && !nameInput.value) nameInput.value = user.name || '';
+      if (emailInput && !emailInput.value) emailInput.value = user.email || '';
+      if (phoneInput && !phoneInput.value) phoneInput.value = user.phone || '';
     }
   }
 
   function goToStep(n) {
     ['checkoutStep1', 'checkoutStep2', 'checkoutStep3'].forEach((id, i) => {
-      document.getElementById(id).style.display = (i + 1 === n) ? 'block' : 'none';
+      const el = document.getElementById(id);
+      if (el) el.style.display = (i + 1 === n) ? 'block' : 'none';
     });
     ['step1Ind', 'step2Ind', 'step3Ind'].forEach((id, i) => {
-      document.getElementById(id).classList.toggle('active', i + 1 <= n);
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('active', i + 1 <= n);
     });
   }
 
   function buildOrderSummary() {
     const items = Cart.getItems();
     const sub = Cart.getSubtotal();
+    const discount = Cart.getDiscount();
     const delivery = Cart.getDeliveryFee();
     const total = Cart.getTotal();
     const box = document.getElementById('orderSummaryBox');
+    if (!box) return;
+
     box.innerHTML = `
-      ${items.map(it => `<div class="summary-row"><span>${it.name} x${it.quantity}</span><span>₹${(it.price * it.quantity).toLocaleString('en-IN')}</span></div>`).join('')}
-      <div class="summary-row"><span>Delivery</span><span>${delivery === 0 ? 'FREE' : '₹' + delivery}</span></div>
-      <div class="summary-row total"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div>
+      <div style="font-weight:700; margin-bottom:8px; font-size:0.95rem; color:var(--text);">Order Summary (${items.length} items)</div>
+      ${items.map(it => `
+        <div class="summary-row" style="font-size:0.88rem; display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span>${it.name} <strong style="color:var(--muted)">× ${it.quantity}</strong></span>
+          <span>₹${(it.price * it.quantity).toLocaleString('en-IN')}</span>
+        </div>
+      `).join('')}
+      <div class="summary-row" style="display:flex; justify-content:space-between; margin-top:8px; border-top:1px dashed var(--border); padding-top:8px;">
+        <span style="color:var(--muted)">Subtotal</span>
+        <span>₹${sub.toLocaleString('en-IN')}</span>
+      </div>
+      ${discount > 0 ? `
+        <div class="summary-row" style="display:flex; justify-content:space-between; color:#4ade80;">
+          <span>Coupon Discount</span>
+          <span>-₹${discount.toLocaleString('en-IN')}</span>
+        </div>
+      ` : ''}
+      <div class="summary-row" style="display:flex; justify-content:space-between;">
+        <span style="color:var(--muted)">Delivery</span>
+        <span style="color:${delivery === 0 ? '#4ade80' : 'inherit'}">${delivery === 0 ? 'FREE' : '₹' + delivery}</span>
+      </div>
+      <div class="summary-row total" style="display:flex; justify-content:space-between; margin-top:10px; border-top:1px solid var(--border); padding-top:10px; font-size:1.15rem; font-weight:800; color:#fff;">
+        <span>Total Payable</span>
+        <span style="color:var(--cyan)">₹${total.toLocaleString('en-IN')}</span>
+      </div>
     `;
   }
 
@@ -54,68 +80,67 @@ const Payment = (() => {
     const btn = document.getElementById('placeOrderBtn');
     const msgEl = document.getElementById('payMsg');
     btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing…';
-    msgEl.className = 'form-msg'; msgEl.style.display = 'none';
+    msgEl.className = 'form-msg';
+    msgEl.style.display = 'none';
 
     try {
       const items = Cart.getItems();
-      const total = Cart.getTotal();
+      const subtotal = Cart.getSubtotal();
+      const discount = Cart.getDiscount();
+      const deliveryFee = Cart.getDeliveryFee();
+      const totalAmount = Cart.getTotal();
 
-      if (method === 'cod') {
-        await placeOrder({ method: 'cod', items, total, razorpayOrderId: null, razorpayPaymentId: null });
-        return;
+      if (method === 'demo_payment') {
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing Demo Payment…';
+        // Simulate realistic 1.2s sandbox transaction latency
+        await new Promise(r => setTimeout(r, 1200));
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing COD Order…';
+        await new Promise(r => setTimeout(r, 600));
       }
 
-      // Create Razorpay order on server
-      const { ok, data } = await Auth.apiFetch('/api/payment/create-order', {
+      // Send to Backend API
+      const { ok, data } = await Auth.apiFetch('/api/orders', {
         method: 'POST',
-        body: JSON.stringify({ amount: total })
+        body: JSON.stringify({
+          ..._addressData,
+          items: items.map(i => ({
+            name: i.name,
+            price: i.price,
+            quantity: i.quantity,
+            img: i.img,
+            category: i.category
+          })),
+          subtotal,
+          discount,
+          deliveryFee,
+          totalAmount,
+          paymentMethod: method
+        })
       });
 
-      if (!ok) throw new Error(data.error || 'Could not create payment order.');
-
-      const user = Auth.getUser();
-      const options = {
-        key: data.keyId,
-        amount: data.amount,
-        currency: data.currency,
-        name: 'Apex Studio',
-        description: 'Secure Checkout',
-        order_id: data.razorpayOrderId,
-        prefill: { name: _addressData.name, email: _addressData.email, contact: _addressData.phone },
-        theme: { color: '#4f8ef7' },
-        handler: async function (response) {
-          // Verify on server before placing order
-          const vr = await Auth.apiFetch('/api/payment/verify', {
-            method: 'POST',
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              orderNumber: 'TMP_' + Date.now()
-            })
-          });
-          if (!vr.ok) {
-            showPayMsg('error', 'Payment verification failed. Contact support.');
-            resetBtn(btn);
-            return;
-          }
-          await placeOrder({ method: 'razorpay', items, total, razorpayOrderId: response.razorpay_order_id, razorpayPaymentId: response.razorpay_payment_id });
-        },
-        modal: { ondismiss: () => { showPayMsg('error', 'Payment cancelled.'); resetBtn(btn); } }
-      };
-
-      // Check if Razorpay script is loaded
-      if (typeof Razorpay === 'undefined') {
-        // Fallback: simulate payment for demo (shows COD flow)
-        Toast.show('Razorpay not configured — using demo mode', 'info');
-        await placeOrder({ method: 'razorpay', items, total, razorpayOrderId: data.razorpayOrderId, razorpayPaymentId: 'pay_demo_' + Date.now() });
-        return;
+      if (!ok) {
+        throw new Error(data.error || 'Failed to complete order.');
       }
 
-      const rzp = new Razorpay(options);
-      rzp.on('payment.failed', () => { showPayMsg('error', 'Payment failed. Please try again.'); resetBtn(btn); });
-      rzp.open();
+      // Success! Clear cart
+      Cart.clear();
+
+      // Update success screen
+      const orderNumEl = document.getElementById('successOrderNum');
+      if (orderNumEl) {
+        orderNumEl.innerHTML = `Order ID: <strong style="color:var(--cyan)">${data.orderNumber}</strong>`;
+      }
+
+      const noteEl = document.getElementById('successNote');
+      if (noteEl) {
+        noteEl.textContent = method === 'demo_payment'
+          ? 'Demo payment verified instantly. Estimated delivery in 2-3 business days.'
+          : 'Cash on Delivery verified. Pay when your parcel arrives.';
+      }
+
+      goToStep(3);
+      Toast.show(data.message || 'Order placed successfully!', 'success');
 
     } catch (err) {
       showPayMsg('error', err.message);
@@ -123,78 +148,92 @@ const Payment = (() => {
     }
   }
 
-  async function placeOrder({ method, items, total, razorpayOrderId, razorpayPaymentId }) {
-    const sub = Cart.getSubtotal();
-    const delivery = Cart.getDeliveryFee();
-    const { ok, data } = await Auth.apiFetch('/api/orders', {
-      method: 'POST',
-      body: JSON.stringify({
-        ...(_addressData),
-        items: items.map(i => ({ name: i.name, price: i.price, quantity: i.quantity })),
-        subtotal: sub, discount: 0, deliveryFee: delivery, totalAmount: total,
-        paymentMethod: method, razorpayOrderId, razorpayPaymentId
-      })
-    });
-
-    const btn = document.getElementById('placeOrderBtn');
-    if (!ok) { showPayMsg('error', data.error || 'Order failed.'); resetBtn(btn); return; }
-
-    Cart.clear();
-    document.getElementById('successOrderNum').textContent = 'Order #' + data.orderNumber;
-    goToStep(3);
-  }
-
   function showPayMsg(type, msg) {
     const el = document.getElementById('payMsg');
-    el.textContent = msg;
-    el.className = `form-msg ${type}`;
+    if (el) {
+      el.textContent = msg;
+      el.className = `form-msg ${type}`;
+      el.style.display = 'block';
+    }
   }
 
   function resetBtn(btn) {
     btn.disabled = false;
-    btn.innerHTML = 'Pay Now <i class="fa-solid fa-lock"></i>';
+    btn.innerHTML = 'Complete Order <i class="fa-solid fa-shield-halved"></i>';
   }
 
   function bindEvents() {
     const addressForm = document.getElementById('addressForm');
-    addressForm.addEventListener('submit', e => {
-      e.preventDefault();
-      _addressData = {
-        customerName: document.getElementById('ckName').value,
-        customerEmail: document.getElementById('ckEmail').value,
-        customerPhone: document.getElementById('ckPhone').value,
-        shippingAddress: document.getElementById('ckAddress').value,
-        city: document.getElementById('ckCity').value,
-        pincode: document.getElementById('ckPin').value
-      };
-      buildOrderSummary();
-      goToStep(2);
-    });
+    if (addressForm) {
+      addressForm.addEventListener('submit', e => {
+        e.preventDefault();
+        _addressData = {
+          customerName: document.getElementById('ckName').value,
+          customerEmail: document.getElementById('ckEmail').value,
+          customerPhone: document.getElementById('ckPhone').value,
+          shippingAddress: document.getElementById('ckAddress').value,
+          city: document.getElementById('ckCity').value,
+          pincode: document.getElementById('ckPin').value
+        };
+        buildOrderSummary();
+        goToStep(2);
+      });
+    }
 
-    document.getElementById('backToAddress').addEventListener('click', () => goToStep(1));
+    const backBtn = document.getElementById('backToAddress');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => goToStep(1));
+    }
 
-    document.getElementById('placeOrderBtn').addEventListener('click', () => {
-      const method = document.querySelector('input[name="payMethod"]:checked').value;
-      executePayment(method);
-    });
+    const placeBtn = document.getElementById('placeOrderBtn');
+    if (placeBtn) {
+      placeBtn.addEventListener('click', () => {
+        const checked = document.querySelector('input[name="payMethod"]:checked');
+        const method = checked ? checked.value : 'demo_payment';
+        executePayment(method);
+      });
+    }
 
-    // Pay option radio highlighting
+    // Payment method selector
     document.querySelectorAll('.pay-option').forEach(opt => {
       opt.addEventListener('click', () => {
         document.querySelectorAll('.pay-option').forEach(o => o.classList.remove('active'));
         opt.classList.add('active');
+        const radio = opt.querySelector('input[type="radio"]');
+        if (radio) radio.checked = true;
+
+        const demoCardUI = document.getElementById('demoCardBox');
+        if (demoCardUI) {
+          demoCardUI.style.display = radio.value === 'demo_payment' ? 'block' : 'none';
+        }
       });
     });
 
-    document.getElementById('checkoutClose').addEventListener('click', () => {
-      document.getElementById('checkoutModal').classList.remove('open');
-    });
+    const closeBtn = document.getElementById('checkoutClose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        document.getElementById('checkoutModal').classList.remove('open');
+      });
+    }
 
-    document.getElementById('continueShopping').addEventListener('click', () => {
-      document.getElementById('checkoutModal').classList.remove('open');
-      document.getElementById('cartDrawer').classList.remove('open');
-      document.getElementById('cartOverlay').classList.remove('open');
-    });
+    const continueBtn = document.getElementById('continueShopping');
+    if (continueBtn) {
+      continueBtn.addEventListener('click', () => {
+        document.getElementById('checkoutModal').classList.remove('open');
+        const drawer = document.getElementById('cartDrawer');
+        const overlay = document.getElementById('cartOverlay');
+        if (drawer) drawer.classList.remove('open');
+        if (overlay) overlay.classList.remove('open');
+      });
+    }
+
+    const viewHistoryBtn = document.getElementById('viewHistoryFromSuccess');
+    if (viewHistoryBtn) {
+      viewHistoryBtn.addEventListener('click', () => {
+        document.getElementById('checkoutModal').classList.remove('open');
+        Orders.openOrderModal();
+      });
+    }
   }
 
   return { initCheckout, bindEvents };

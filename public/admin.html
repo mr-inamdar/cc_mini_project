@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apex Studio — Administrator Dashboard</title>
+  <meta name="description" content="Manage products, orders, stock, and pricing for Apex Studio." />
+  <link rel="icon" href="/assets/icon.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="admin-body">
+  <!-- Ambient background -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <!-- Admin Navigation / Header -->
+  <header class="navbar" style="position: sticky; top: 0; z-index: 100;">
+    <div class="nav-container">
+      <a href="/admin" class="nav-brand">
+        <div class="brand-icon" style="background:linear-gradient(135deg, var(--pink), var(--purple));"><i class="fa-solid fa-shield-halved"></i></div>
+        <span>Apex<strong>Admin</strong></span>
+      </a>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <a href="/" class="btn btn-outline" style="padding:8px 16px; font-size:0.85rem;"><i class="fa-solid fa-arrow-left"></i> Back to Store</a>
+        <div id="adminUserBadge" style="font-size:0.85rem; color:var(--muted); display:none;">
+          <i class="fa-solid fa-circle-user" style="color:var(--pink); margin-right:4px;"></i> <span id="adminUserName">Admin</span>
+        </div>
+        <button id="adminLogoutBtn" class="icon-btn" title="Sign out" style="display:none;"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Login Gate for Admin -->
+  <div id="adminLoginGate" style="display:none; max-width:440px; margin:80px auto; padding:32px;" class="glass-card">
+    <div style="text-align:center; margin-bottom:20px;">
+      <div class="brand-icon" style="width:60px; height:60px; margin:0 auto 12px; font-size:1.6rem; background:linear-gradient(135deg, var(--pink), var(--purple));">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2 style="font-size:1.6rem; font-weight:800;">Admin Access Required</h2>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:4px;">Please authenticate with administrator credentials.</p>
+    </div>
+    <form id="adminLoginForm">
+      <div class="form-group">
+        <label>Admin Email</label>
+        <input type="email" id="admEmail" value="admin@apex.com" required />
+      </div>
+      <div class="form-group">
+        <label>Admin Password</label>
+        <input type="password" id="admPass" value="admin123" required />
+      </div>
+      <div class="form-msg" id="admLoginMsg"></div>
+      <button type="submit" class="btn btn-primary full" id="admLoginBtn" style="margin-top:10px;">Sign In to Dashboard</button>
+    </form>
+    <div style="margin-top:16px; padding:10px; background:rgba(255,255,255,0.03); border-radius:8px; font-size:0.8rem; color:var(--muted); text-align:center;">
+      Default Admin: <strong>admin@apex.com</strong> / <strong>admin123</strong>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Content -->
+  <main class="admin-container" id="adminMainContent" style="display:none;">
+    <div class="admin-header">
+      <div>
+        <h1 style="font-size:2rem; font-weight:800;">Administrator <span class="gradient-text">Control Center</span></h1>
+        <p style="color:var(--muted); font-size:0.95rem;">Manage store inventory, adjust pricing, inspect customer orders, and update shipping statuses.</p>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-outline" id="syncCatalogBtn"><i class="fa-solid fa-arrows-rotate"></i> Sync Default Catalog</button>
+        <button class="btn btn-primary" id="openAddProductModal"><i class="fa-solid fa-plus"></i> Add New Product</button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="admin-stats-grid">
+      <div class="stat-box">
+        <div class="stat-box-icon blue"><i class="fa-solid fa-box"></i></div>
+        <div class="stat-box-data">
+          <h3 id="statTotalProducts">0</h3>
+          <p>Total Products</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-icon purple"><i class="fa-solid fa-cart-shopping"></i></div>
+        <div class="stat-box-data">
+          <h3 id="statTotalOrders">0</h3>
+          <p>Customer Orders</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-icon cyan"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+        <div class="stat-box-data">
+          <h3 id="statTotalRevenue">₹0</h3>
+          <p>Total Revenue</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-icon pink"><i class="fa-solid fa-truck"></i></div>
+        <div class="stat-box-data">
+          <h3 id="statActiveShipments">0</h3>
+          <p>Active Shipments</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" data-tab="products"><i class="fa-solid fa-box-archive" style="margin-right:6px;"></i> Product Inventory</button>
+      <button class="admin-tab-btn" data-tab="orders"><i class="fa-solid fa-receipt" style="margin-right:6px;"></i> Customer Orders</button>
+    </div>
+
+    <!-- Tab 1: Products Management -->
+    <section id="tabProducts" class="admin-tab-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+        <input type="text" id="adminProductSearch" placeholder="Filter products by name or category…" style="max-width:340px; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:var(--radius-sm); color:#fff; padding:10px 16px; font-size:0.9rem;" />
+        <span style="font-size:0.85rem; color:var(--muted)" id="productCountLabel">Showing 0 products</span>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsTbody">
+            <!-- Loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Tab 2: Orders Management -->
+    <section id="tabOrders" class="admin-tab-content" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+        <div style="font-size:0.95rem; font-weight:600;">All Customer Transactions & Orders</div>
+        <span style="font-size:0.85rem; color:var(--muted)" id="orderCountLabel">0 orders total</span>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Amount</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrdersTbody">
+            <!-- Loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Product Modal (Add / Edit) -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal glass-card" style="max-width:650px; width:95%; max-height:90vh; overflow-y:auto;">
+      <button class="modal-close" id="productModalClose"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title" id="productModalTitle">Add New Product</h2>
+      <p class="modal-sub">Enter product details to publish to the catalog</p>
+      <form id="productForm">
+        <input type="hidden" id="pmId" />
+        <div class="form-row">
+          <div class="form-group"><label>Product Name *</label><input type="text" id="pmName" required placeholder="Sony WH-1000XM5" /></div>
+          <div class="form-group"><label>Brand</label><input type="text" id="pmBrand" placeholder="Sony" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="pmCategory" style="background:#070f22; border:1px solid var(--border); border-radius:var(--radius-sm); color:#fff; padding:12px 14px; font-family:inherit; width:100%;">
+              <option value="mobile">Mobiles</option>
+              <option value="laptop">Laptops</option>
+              <option value="gaming">Gaming</option>
+              <option value="clothes">Clothes</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Stock Quantity *</label><input type="number" id="pmStock" value="25" min="0" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Selling Price (₹) *</label><input type="number" id="pmPrice" required placeholder="29990" /></div>
+          <div class="form-group"><label>Original Price (₹)</label><input type="number" id="pmOriginalPrice" placeholder="34990" /></div>
+        </div>
+        <div class="form-group"><label>Image URL *</label><input type="url" id="pmImg" required placeholder="https://images.unsplash.com/..." /></div>
+        <div class="form-group"><label>Description</label><textarea id="pmDesc" rows="3" style="background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:var(--radius-sm); color:#fff; padding:10px 14px; font-family:inherit; width:100%;" placeholder="Product overview and technical capabilities..."></textarea></div>
+        <div class="form-group"><label>Key Features (comma separated)</label><input type="text" id="pmFeatures" placeholder="Active Noise Cancellation, 30H Battery, LDAC Hi-Res Audio" /></div>
+        <div class="form-msg" id="pmMsg"></div>
+        <button type="submit" class="btn btn-primary full" id="pmSubmitBtn" style="margin-top:10px;">Save Product</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
