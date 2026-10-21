@@ -1,0 +1,130 @@
+[
+  {
+    "id": 1,
+    "name": "iPhone 15 Pro",
+    "brand": "Apple",
+    "category": "mobile",
+    "price": 134900,
+    "img": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 2,
+    "name": "Galaxy S24 Ultra",
+    "brand": "Samsung",
+    "category": "mobile",
+    "price": 129999,
+    "img": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 11,
+    "name": "Realme 12 Pro 5G",
+    "brand": "Realme",
+    "category": "mobile",
+    "price": 49999,
+    "img": "https://tse3.mm.bing.net/th/id/OIP.CXPpfU3FJY60ypwWRLop_QHaHa?r=0&w=1440&h=1440&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "id": 3,
+    "name": "Pixel 8 Pro",
+    "brand": "Google",
+    "category": "mobile",
+    "price": 106999,
+    "img": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 4,
+    "name": "MacBook Air M3",
+    "brand": "Apple",
+    "category": "laptop",
+    "price": 114900,
+    "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 5,
+    "name": "XPS 15",
+    "brand": "Dell",
+    "category": "laptop",
+    "price": 145000,
+    "img": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 13,
+    "name": "Gemiing PC Setup",
+    "brand": "Dell",
+    "category": "gaming",
+    "price": 445000,
+    "img": "https://i.pinimg.com/1200x/e3/de/d6/e3ded6b09a25c557fe2277a63bbc123f.jpg"
+  },
+  {
+    "id": 6,
+    "name": "PlayStation 5",
+    "brand": "Sony",
+    "category": "gaming",
+    "price": 54990,
+    "img": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 7,
+    "name": "ROG Strix G16",
+    "brand": "ASUS",
+    "category": "gaming",
+    "price": 135990,
+    "img": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 8,
+    "name": "Premium Hoodie",
+    "brand": "APX Merch",
+    "category": "clothes",
+    "price": 2499,
+    "img": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 9,
+    "name": "Men T-Shart",
+    "brand": "APX Merch",
+    "category": "clothes",
+    "price": 499,
+    "img": "https://i.pinimg.com/1200x/df/32/3e/df323e4927de0162e6ec6a22617ce8bf.jpg"
+  },
+  {
+    "id": 10,
+    "name": "ThinkPad X1 Carbon",
+    "brand": "Lenovo",
+    "category": "laptop",
+    "price": 135000,
+    "img": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=300&q=80"
+  },
+  {
+    "id": 12,
+    "name": "APX Classic Pent",
+    "brand": "APX Merch",
+    "category": "clothes",
+    "price": 999,
+    "img": "https://i.pinimg.com/736x/91/fc/85/91fc8557f2d334d64bc0aab271e70e7a.jpg"
+  },
+  {
+    "id": 15,
+    "name": "APX Classic Kurti Pent Outfit For Women",
+    "brand": "APX Merch",
+    "category": "clothes",
+    "price": 999,
+    "img": "https://i.pinimg.com/736x/05/48/e0/0548e0938e056723473003502f5454b5.jpg"
+  },
+  {
+    "id": 14,
+    "name": "Nintendo Switch OLED",
+    "brand": "Nintendo",
+    "category": "gaming",
+    "price": 34990,
+    "img": "https://images.unsplash.com/photo-1617096200347-cb04ae810b1d?auto=format&fit=crop&w=300&q=80"
+  }
+  ,{
+    "id": 16,
+    "name": "Nintendo Switch OLED X2",
+    "brand": "Nintendo",
+    "category": "gaming",
+    "price": 34990,
+    "img": "https://spigen.ph/sites/default/files/images/products/agl03829-4.jpg"
+  }
+]

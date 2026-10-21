@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apex Studio — Premium Tech Store</title>
+  <meta name="description" content="Shop premium smartphones, laptops, gaming gear, and fashion at Apex Studio — the ultimate tech destination." />
+  <link rel="icon" href="/assets/icon.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- ─── Ambient Background ─────────────────────────────────────────── -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ─── Navbar ────────────────────────────────────────────────────── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">
+        <div class="brand-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+        <span>Apex<strong>Studio</strong></span>
+      </a>
+      <div class="nav-center" id="nav-cats">
+        <button class="cat-btn active" data-cat="all">All</button>
+        <button class="cat-btn" data-cat="mobile">Mobiles</button>
+        <button class="cat-btn" data-cat="laptop">Laptops</button>
+        <button class="cat-btn" data-cat="gaming">Gaming</button>
+        <button class="cat-btn" data-cat="clothes">Clothes</button>
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn" id="searchToggle" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn cart-btn" id="cartToggle" aria-label="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge" id="cartBadge">0</span>
+        </button>
+        <button class="icon-btn" id="authToggle" aria-label="Account"><i class="fa-regular fa-user"></i></button>
+        <button class="icon-btn menu-btn" id="mobileMenu" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+    <!-- Search Bar -->
+    <div class="search-bar" id="searchBar">
+      <input type="text" id="searchInput" placeholder="Search products…" autocomplete="off" />
+      <button class="search-close" id="searchClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobileNav">
+      <button class="cat-btn active" data-cat="all">All</button>
+      <button class="cat-btn" data-cat="mobile">Mobiles</button>
+      <button class="cat-btn" data-cat="laptop">Laptops</button>
+      <button class="cat-btn" data-cat="gaming">Gaming</button>
+      <button class="cat-btn" data-cat="clothes">Clothes</button>
+    </div>
+  </nav>
+
+  <!-- ─── Hero ──────────────────────────────────────────────────────── -->
+  <header class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-kicker"><i class="fa-solid fa-star"></i> #1 Tech Destination in India</p>
+      <h1 class="hero-headline">
+        Future Tech,<br />
+        <span class="gradient-text">Delivered Today</span>
+      </h1>
+      <p class="hero-sub">Premium smartphones, laptops, gaming gear and fashion — curated for the bold.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary" id="heroShop">Shop Now <i class="fa-solid fa-arrow-right"></i></button>
+        <button class="btn btn-outline" id="heroDeals">Hot Deals <i class="fa-solid fa-fire"></i></button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong>50K+</strong><span>Products</span></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><strong>1M+</strong><span>Happy Users</span></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><strong>5★</strong><span>Rating</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card card-main tilt-card" id="heroCard">
+        <div class="card-glow"></div>
+        <div class="card-body">
+          <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=300&q=80" alt="iPhone 15 Pro" loading="eager" />
+          <div class="card-info">
+            <h3>iPhone 15 Pro</h3>
+            <p>Apple · Titanium Edition</p>
+            <div class="card-price">₹1,34,900</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── Products Section ─────────────────────────────────────────── -->
+  <main class="products-section" id="products">
+    <div class="section-header">
+      <h2 class="section-title">Our <span class="gradient-text">Collection</span></h2>
+      <p class="section-sub">Hand-picked premium products at unbeatable prices.</p>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Loaded via JS -->
+    </div>
+    <div class="no-results" id="noResults" style="display:none">
+      <i class="fa-solid fa-box-open"></i>
+      <p>No products found.</p>
+    </div>
+  </main>
+
+  <!-- ─── Features Strip ───────────────────────────────────────────── -->
+  <section class="features-strip">
+    <div class="feature"><i class="fa-solid fa-truck-fast"></i><div><strong>Free Delivery</strong><span>On orders above ₹999</span></div></div>
+    <div class="feature"><i class="fa-solid fa-shield-halved"></i><div><strong>Secure Payments</strong><span>256-bit SSL + Razorpay</span></div></div>
+    <div class="feature"><i class="fa-solid fa-rotate-left"></i><div><strong>Easy Returns</strong><span>7-day hassle-free</span></div></div>
+    <div class="feature"><i class="fa-solid fa-headset"></i><div><strong>24/7 Support</strong><span>Real humans, fast replies</span></div></div>
+  </section>
+
+  <!-- ─── Footer ────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-icon sm"><i class="fa-solid fa-bolt-lightning"></i></div>
+        <span>Apex<strong>Studio</strong></span>
+      </div>
+      <p class="footer-copy">© 2026 Apex Studio. Built with ❤ by mr-inamdar.</p>
+      <div class="footer-links">
+        <a href="#products">Shop</a>
+        <a href="#" id="footerLogin">Login</a>
+        <a href="#" id="footerRegister">Register</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── Modals ────────────────────────────────────────────────────── -->
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal glass-card" id="authModalBox">
+      <button class="modal-close" id="authModalClose"><i class="fa-solid fa-xmark"></i></button>
+      <!-- Login Form -->
+      <div id="loginForm">
+        <h2 class="modal-title">Welcome Back</h2>
+        <p class="modal-sub">Sign in to your Apex account</p>
+        <form id="loginFormEl">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="you@email.com" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" />
+              <button type="button" class="eye-btn" data-target="loginPassword"><i class="fa-regular fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="form-msg" id="loginMsg"></div>
+          <button type="submit" class="btn btn-primary full" id="loginBtn">Sign In</button>
+        </form>
+        <p class="modal-switch">New here? <button id="switchToRegister">Create Account</button></p>
+      </div>
+      <!-- Register Form -->
+      <div id="registerForm" style="display:none">
+        <h2 class="modal-title">Join Apex</h2>
+        <p class="modal-sub">Create your free account</p>
+        <form id="registerFormEl">
+          <div class="form-group">
+            <label for="regName">Full Name</label>
+            <input type="text" id="regName" placeholder="Alex Hunter" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="you@email.com" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="regPhone">Phone (optional)</label>
+            <input type="tel" id="regPhone" placeholder="+91 9876543210" autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="regPassword" placeholder="Min. 6 characters" required autocomplete="new-password" />
+              <button type="button" class="eye-btn" data-target="regPassword"><i class="fa-regular fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="form-msg" id="registerMsg"></div>
+          <button type="submit" class="btn btn-primary full" id="registerBtn">Create Account</button>
+        </form>
+        <p class="modal-switch">Already have an account? <button id="switchToLogin">Sign In</button></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div class="drawer-overlay" id="cartOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h2><i class="fa-solid fa-bag-shopping"></i> Your Cart</h2>
+      <button class="icon-btn" id="cartClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-items" id="cartItems">
+      <div class="empty-cart"><i class="fa-solid fa-box-open"></i><p>Your cart is empty</p></div>
+    </div>
+    <div class="drawer-footer" id="cartFooter" style="display:none">
+      <div class="cart-summary">
+        <span>Subtotal</span><span id="cartSubtotal">₹0</span>
+      </div>
+      <div class="cart-summary">
+        <span>Delivery</span><span id="cartDelivery">FREE</span>
+      </div>
+      <div class="cart-summary total">
+        <span>Total</span><span id="cartTotal">₹0</span>
+      </div>
+      <button class="btn btn-primary full" id="checkoutBtn">Proceed to Checkout <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+  </aside>
+
+  <!-- Checkout / Payment Modal -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal glass-card checkout-modal" id="checkoutModalBox">
+      <button class="modal-close" id="checkoutClose"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title">Checkout</h2>
+      <!-- Steps -->
+      <div class="checkout-steps">
+        <div class="step active" id="step1Ind"><span>1</span> Address</div>
+        <div class="step-line"></div>
+        <div class="step" id="step2Ind"><span>2</span> Payment</div>
+        <div class="step-line"></div>
+        <div class="step" id="step3Ind"><span>3</span> Done</div>
+      </div>
+
+      <!-- Step 1: Address -->
+      <div id="checkoutStep1">
+        <form id="addressForm">
+          <div class="form-row">
+            <div class="form-group"><label>Full Name</label><input type="text" id="ckName" required placeholder="Alex Hunter" /></div>
+            <div class="form-group"><label>Email</label><input type="email" id="ckEmail" required placeholder="you@email.com" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Phone</label><input type="tel" id="ckPhone" required placeholder="+91 XXXXXXXXXX" /></div>
+            <div class="form-group"><label>Pincode</label><input type="text" id="ckPin" required placeholder="400001" maxlength="6" /></div>
+          </div>
+          <div class="form-group"><label>Shipping Address</label><input type="text" id="ckAddress" required placeholder="Flat/House No, Street, Landmark" /></div>
+          <div class="form-group"><label>City</label><input type="text" id="ckCity" required placeholder="Mumbai" /></div>
+          <button type="submit" class="btn btn-primary full">Continue to Payment <i class="fa-solid fa-arrow-right"></i></button>
+        </form>
+      </div>
+
+      <!-- Step 2: Payment -->
+      <div id="checkoutStep2" style="display:none">
+        <div class="payment-methods">
+          <label class="pay-option active" id="payRzp">
+            <input type="radio" name="payMethod" value="razorpay" checked />
+            <i class="fa-solid fa-credit-card"></i> Razorpay (Cards / UPI / NetBanking)
+          </label>
+          <label class="pay-option" id="payCod">
+            <input type="radio" name="payMethod" value="cod" />
+            <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery
+          </label>
+        </div>
+        <div class="order-summary-box" id="orderSummaryBox"></div>
+        <div class="form-msg" id="payMsg"></div>
+        <div class="checkout-btns">
+          <button class="btn btn-outline" id="backToAddress"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" id="placeOrderBtn">Pay Now <i class="fa-solid fa-lock"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 3: Success -->
+      <div id="checkoutStep3" style="display:none">
+        <div class="success-animation">
+          <div class="success-circle"><i class="fa-solid fa-check"></i></div>
+          <h3>Order Placed!</h3>
+          <p id="successOrderNum"></p>
+          <p class="success-note">You'll receive an email confirmation shortly.</p>
+          <button class="btn btn-primary" id="continueShopping">Continue Shopping</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="/js/auth.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/payment.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
