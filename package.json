@@ -1,18 +1,16 @@
 {
   "name": "cc-mini-project",
   "version": "2.0.0",
-  "description": "Apex Studio Store - Full-Stack E-Commerce Web App with Express, MongoDB, Razorpay, and 3D Cards",
+  "description": "Apex Studio Store - Full-Stack E-Commerce Web App with Express, MongoDB, and Vanilla JavaScript",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js",
-    "test": "node tests/test.js"
+    "dev": "node server.js"
   },
   "keywords": [
     "ecommerce",
     "mongodb",
     "express",
-    "razorpay",
     "glassmorphism",
     "3d-cards",
     "vanilla-js",
@@ -29,7 +27,6 @@
     "express-rate-limit": "^7.3.1",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.5.1",
-    "razorpay": "^2.9.4"
+    "mongoose": "^8.5.1"
   }
 }
